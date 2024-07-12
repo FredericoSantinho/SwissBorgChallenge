@@ -40,6 +40,12 @@ kotlin {
 			implementation(compose.ui)
 			implementation(compose.components.resources)
 			implementation(compose.components.uiToolingPreview)
+			implementation(libs.koin.compose)
+			implementation(libs.koin.composeVM)
+			implementation(libs.ktor.client.core)
+			implementation(libs.ktor.client.cio)
+			implementation(libs.ktor.client.content.negotiation)
+			implementation(libs.ktor.serialization.kotlinx.json)
 		}
 	}
 }
