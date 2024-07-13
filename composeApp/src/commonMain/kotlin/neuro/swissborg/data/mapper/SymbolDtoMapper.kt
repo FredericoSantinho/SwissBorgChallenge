@@ -2,7 +2,7 @@ package neuro.swissborg.data.mapper
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.jsonArray
-import neuro.swissborg.data.model.SymbolDto
+import neuro.swissborg.data.model.network.SymbolDto
 import neuro.swissborg.domain.entity.Symbol
 
 fun JsonArray.toSymbolDto(): SymbolDto {

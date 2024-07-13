@@ -2,7 +2,7 @@ package neuro.swissborg.data.mapper
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.jsonArray
-import neuro.swissborg.data.model.TickerDto
+import neuro.swissborg.data.model.network.TickerDto
 import neuro.swissborg.domain.entity.Ticker
 
 fun JsonArray.toTickerDto(): TickerDto {
