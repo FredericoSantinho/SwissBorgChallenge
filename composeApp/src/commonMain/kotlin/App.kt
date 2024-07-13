@@ -12,18 +12,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import neuro.swissborg.viewmodel.AppViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 import swissborgmobiletechchallenge.composeapp.generated.resources.Res
 import swissborgmobiletechchallenge.composeapp.generated.resources.compose_multiplatform
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 @Preview
-fun App() {
+fun App(viewModel: AppViewModel = koinViewModel()) {
 	MaterialTheme {
 		var showContent by remember { mutableStateOf(false) }
 		Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-			Button(onClick = { showContent = !showContent }) {
+			Button(onClick = {
+				viewModel.onClick()
+				showContent = !showContent
+			}) {
 				Text("Click me!")
 			}
 			AnimatedVisibility(showContent) {

@@ -6,6 +6,7 @@ plugins {
 	alias(libs.plugins.androidApplication)
 	alias(libs.plugins.jetbrainsCompose)
 	alias(libs.plugins.compose.compiler)
+	alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -46,6 +47,9 @@ kotlin {
 			implementation(libs.ktor.client.cio)
 			implementation(libs.ktor.client.content.negotiation)
 			implementation(libs.ktor.serialization.kotlinx.json)
+		}
+		commonTest.dependencies {
+			implementation(libs.kotlin.test)
 		}
 	}
 }
