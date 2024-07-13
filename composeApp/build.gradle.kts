@@ -7,6 +7,8 @@ plugins {
 	alias(libs.plugins.jetbrainsCompose)
 	alias(libs.plugins.compose.compiler)
 	alias(libs.plugins.kotlinSerialization)
+	alias(libs.plugins.ksp)
+	alias(libs.plugins.room)
 }
 
 kotlin {
@@ -58,6 +60,9 @@ kotlin {
 			implementation(libs.coil.mp)
 			implementation(libs.coil.network.ktor)
 			implementation(libs.coil.compose)
+
+			implementation(libs.room.runtime)
+			implementation(libs.sqlite.bundled)
 		}
 		commonTest.dependencies {
 			implementation(libs.kotlin.test)
@@ -102,3 +107,10 @@ android {
 	}
 }
 
+room {
+	schemaDirectory("$projectDir/schemas")
+}
+
+dependencies {
+	add("kspCommonMainMetadata", libs.room.compiler)
+}
