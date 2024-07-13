@@ -1,7 +1,7 @@
 package neuro.swissborg.domain.repository
 
-import neuro.swissborg.data.model.TickerDto
+import neuro.swissborg.domain.entity.Ticker
 
 interface TickersRepository {
-	suspend fun getTickers(symbols: List<String>): List<TickerDto>
+	suspend fun getTickers(symbols: List<String>): List<Ticker>
 }
