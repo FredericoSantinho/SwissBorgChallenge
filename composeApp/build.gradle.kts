@@ -30,9 +30,16 @@ kotlin {
 
 	sourceSets {
 
+		jvmMain.dependencies {
+			implementation(libs.ktor.client.okhttp)
+		}
 		androidMain.dependencies {
 			implementation(compose.preview)
 			implementation(libs.androidx.activity.compose)
+			implementation(libs.ktor.client.okhttp)
+		}
+		iosMain.dependencies {
+			implementation(libs.ktor.client.darwin)
 		}
 		commonMain.dependencies {
 			implementation(compose.runtime)
@@ -47,6 +54,10 @@ kotlin {
 			implementation(libs.ktor.client.cio)
 			implementation(libs.ktor.client.content.negotiation)
 			implementation(libs.ktor.serialization.kotlinx.json)
+			implementation(libs.coil.compose.core)
+			implementation(libs.coil.mp)
+			implementation(libs.coil.network.ktor)
+			implementation(libs.coil.compose)
 		}
 		commonTest.dependencies {
 			implementation(libs.kotlin.test)
