@@ -1,7 +1,7 @@
 package neuro.swissborg.domain.repository
 
-import neuro.swissborg.data.model.SymbolDto
+import neuro.swissborg.domain.entity.Symbol
 
 interface SymbolsRepository {
-	suspend fun getSymbols(): List<SymbolDto>
+	suspend fun getSymbols(): List<Symbol>
 }
