@@ -2,6 +2,7 @@ package neuro.swissborg
 
 import android.app.Application
 import android.content.Context
+import neuro.swissborg.di.daoModule
 import neuro.swissborg.di.networkModule
 import neuro.swissborg.di.platformModule
 import neuro.swissborg.di.repositoryModule
@@ -26,6 +27,7 @@ class App : Application() {
 				networkModule,
 				viewModelModule,
 				repositoryModule,
+				daoModule,
 				useCaseModule
 			)
 		}
