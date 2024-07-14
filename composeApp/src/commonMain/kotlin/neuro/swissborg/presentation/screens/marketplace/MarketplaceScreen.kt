@@ -23,9 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import neuro.swissborg.presentation.mapper.toPresentation
 import neuro.swissborg.presentation.screens.common.LoadingComposable
+import neuro.swissborg.presentation.screens.marketplace.viewmodel.MarketplaceViewModel
 import neuro.swissborg.presentation.theme.SwissBorgChallengeTheme
 import neuro.swissborg.presentation.util.showSnackBar
-import neuro.swissborg.presentation.viewmodel.MarketplaceViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 

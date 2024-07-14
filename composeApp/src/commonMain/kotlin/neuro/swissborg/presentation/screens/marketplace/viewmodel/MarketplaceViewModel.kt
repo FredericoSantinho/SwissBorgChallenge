@@ -1,4 +1,4 @@
-package neuro.swissborg.presentation.viewmodel
+package neuro.swissborg.presentation.screens.marketplace.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

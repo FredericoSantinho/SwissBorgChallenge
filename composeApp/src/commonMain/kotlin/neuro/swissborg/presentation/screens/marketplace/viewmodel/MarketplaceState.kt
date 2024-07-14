@@ -1,4 +1,4 @@
-package neuro.swissborg.presentation.viewmodel
+package neuro.swissborg.presentation.screens.marketplace.viewmodel
 
 import neuro.swissborg.presentation.model.CoinDetailsModel
 
