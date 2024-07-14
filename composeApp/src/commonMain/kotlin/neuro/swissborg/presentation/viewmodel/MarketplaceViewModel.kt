@@ -8,9 +8,11 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import neuro.swissborg.domain.usecase.FetchPeriodicallyCoinsDetailsUseCase
 import neuro.swissborg.domain.usecase.ObserveCoinDetailsUseCase
@@ -26,20 +28,32 @@ class MarketplaceViewModel(
 	var state by mutableStateOf(MarketplaceState(isLoading = true))
 		private set
 
+	private val coinsDetailsModels = MutableStateFlow<List<CoinDetailsModel>>(emptyList())
+	private val searchTerm = MutableStateFlow("")
+
 	private var fetchCoinsDetailsJob: Job = Job()
 
 	init {
-		observeCoinDetails()
+		observeCoinsDetails()
 		startFetchingCoinsDetails()
+		setupStateUpdateWithSearchQuery()
 	}
 
 	fun onSearchTerm(searchTerm: String) {
-
+		this.searchTerm.value = searchTerm
 	}
 
-	private suspend fun foo(): Int {
-		delay(1)
-		return 1
+	private fun setupStateUpdateWithSearchQuery() {
+		coinsDetailsModels.combine(searchTerm) { coinModels, searchTerm ->
+			coinModels.let {
+				val filteredCoins = coinModels.filter { filterCoinsDetailsModels(it, searchTerm) }
+				setCoinsDetailsModelsState(filteredCoins)
+			}
+		}.launchIn(viewModelScope)
+	}
+
+	private fun filterCoinsDetailsModels(coinDetailsModel: CoinDetailsModel, query: String): Boolean {
+		return query.lowercase().split(" ").all { coinDetailsModel.name.lowercase().contains(it) }
 	}
 
 	private fun startFetchingCoinsDetails() {
@@ -52,7 +66,7 @@ class MarketplaceViewModel(
 			fetchPeriodicallyCoinsDetailsUseCase.execute(getSymbolPairsList())
 		}
 
-	private fun observeCoinDetails() {
+	private fun observeCoinsDetails() {
 		viewModelScope.launch(mainDispatcher) {
 			observeCoinDetailsUseCase.execute().catch { handleError(it) }.collectLatest {
 				setCoinsDetailsModels(it.toPresentation())
@@ -66,6 +80,10 @@ class MarketplaceViewModel(
 	}
 
 	private fun setCoinsDetailsModels(coinsDetailsModels: List<CoinDetailsModel>) {
+		this.coinsDetailsModels.value = coinsDetailsModels
+	}
+
+	private fun setCoinsDetailsModelsState(coinsDetailsModels: List<CoinDetailsModel>) {
 		state = state.copy(coinsDetailsModels = coinsDetailsModels)
 	}
 
