@@ -1,6 +1,7 @@
 package neuro.swissborg.presentation.screens.marketplace
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,12 +13,19 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.seiko.imageloader.rememberImagePainter
 import neuro.swissborg.presentation.model.CoinDetailsModel
+import neuro.swissborg.presentation.theme.green
 import neuro.swissborg.presentation.util.Spacer16
 import neuro.swissborg.presentation.util.Spacer4
+import neuro.swissborg.presentation.util.Spacer8
+import org.jetbrains.compose.resources.stringResource
+import swissborgmobiletechchallenge.composeapp.generated.resources.Res
+import swissborgmobiletechchallenge.composeapp.generated.resources.earn_yield
 
 @Composable
 fun CoinDetailsComposable(coinDetailsModel: CoinDetailsModel, modifier: Modifier = Modifier) {
@@ -38,7 +46,13 @@ fun CoinDetailsComposable(coinDetailsModel: CoinDetailsModel, modifier: Modifier
 					fontWeight = FontWeight.Bold
 				)
 				Spacer4()
-				Text(coinDetailsModel.symbol, style = MaterialTheme.typography.body2)
+				Row(verticalAlignment = Alignment.CenterVertically) {
+					if (coinDetailsModel.allowsFunding) {
+						FundingIcon()
+						Spacer8()
+					}
+					Text(coinDetailsModel.symbol, style = MaterialTheme.typography.body2)
+				}
 			}
 			Spacer(modifier = Modifier.weight(1.0f))
 			Column(horizontalAlignment = Alignment.End) {
@@ -48,4 +62,14 @@ fun CoinDetailsComposable(coinDetailsModel: CoinDetailsModel, modifier: Modifier
 			}
 		}
 	}
+}
+
+@Composable
+fun FundingIcon() {
+	Text(
+		stringResource(Res.string.earn_yield),
+		color = MaterialTheme.colors.primary,
+		style = MaterialTheme.typography.body2.copy(fontSize = 12.sp),
+		modifier = Modifier.clip(MaterialTheme.shapes.small).background(green).padding(4.dp)
+	)
 }

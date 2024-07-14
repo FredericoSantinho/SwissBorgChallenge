@@ -4,8 +4,8 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import kotlinx.serialization.json.JsonArray
-import neuro.swissborg.data.mapper.toDomain
-import neuro.swissborg.data.mapper.toSymbolsDto
+import neuro.swissborg.data.mapper.network.toDomain
+import neuro.swissborg.data.mapper.network.toSymbolsDto
 import neuro.swissborg.domain.entity.Symbol
 import neuro.swissborg.domain.repository.SymbolsRepository
 

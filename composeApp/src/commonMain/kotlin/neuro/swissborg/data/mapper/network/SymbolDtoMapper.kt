@@ -1,4 +1,4 @@
-package neuro.swissborg.data.mapper
+package neuro.swissborg.data.mapper.network
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.jsonArray

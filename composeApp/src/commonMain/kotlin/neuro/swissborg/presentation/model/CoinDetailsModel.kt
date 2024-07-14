@@ -9,4 +9,5 @@ data class CoinDetailsModel(
 	val price: String,
 	val priceChangePercent: String,
 	val priceChangeColor: Color,
+	val allowsFunding: Boolean,
 )

@@ -16,7 +16,7 @@ import org.koin.dsl.module
 
 val useCaseModule = module {
 	factory<GetSymbolPairsUseCase> { GetSymbolPairsUseCaseImpl() }
-	factory<GetCoinsDetailsUseCase> { GetCoinsDetailsUseCaseImpl(get(), get()) }
+	factory<GetCoinsDetailsUseCase> { GetCoinsDetailsUseCaseImpl(get(), get(), get()) }
 	factory<SaveCoinsDetailsUseCase> { SaveCoinsDetailsUseCaseImpl(get()) }
 	factory<FetchCoinsDetailsUseCase> { FetchCoinsDetailsUseCaseImpl(get(), get()) }
 	factory<FetchPeriodicallyCoinsDetailsUseCase> { FetchPeriodicallyCoinsDetailsUseCaseImpl(get()) }

@@ -304,7 +304,8 @@ class MarketplaceViewModelTest {
 				"https://static.bitfinex.com/images/icons/ETH.svg",
 				"$ 200.0",
 				"-20.0%",
-				Color.Red
+				Color.Red,
+				true
 			)
 		)
 	}
@@ -317,7 +318,8 @@ class MarketplaceViewModelTest {
 				"https://static.bitfinex.com/images/icons/BTC.svg",
 				"$ 100.0",
 				"+10.0%",
-				Color(18378557361896816640UL)
+				Color(18378557361896816640UL),
+				true
 			),
 			CoinDetailsModel(
 				"Ethereum",
@@ -325,7 +327,8 @@ class MarketplaceViewModelTest {
 				"https://static.bitfinex.com/images/icons/ETH.svg",
 				"$ 200.0",
 				"-20.0%",
-				Color.Red
+				Color.Red,
+				true
 			)
 		)
 	}
@@ -338,7 +341,8 @@ class MarketplaceViewModelTest {
 				"https://static.bitfinex.com/images/icons/BTC.svg",
 				100.0,
 				10.0,
-				18378557361896816640UL
+				18378557361896816640UL,
+				true
 			),
 			CoinDetails(
 				"Ethereum",
@@ -346,7 +350,8 @@ class MarketplaceViewModelTest {
 				"https://static.bitfinex.com/images/icons/ETH.svg",
 				200.0,
 				-20.0,
-				18446462598732840960UL
+				18446462598732840960UL,
+				true
 			)
 		)
 	}

@@ -7,4 +7,5 @@ data class CoinDetails(
 	val price: Double,
 	val priceChangePercent: Double,
 	val priceChangeColor: ULong,
+	val allowsFunding: Boolean,
 )

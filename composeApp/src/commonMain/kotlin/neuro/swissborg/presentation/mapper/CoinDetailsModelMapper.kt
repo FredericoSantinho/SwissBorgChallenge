@@ -12,7 +12,8 @@ fun CoinDetails.toPresentation() = CoinDetailsModel(
 	iconUrl,
 	price.formatCurrency(3),
 	formatPriceChange(priceChangePercent),
-	Color(priceChangeColor)
+	Color(priceChangeColor),
+	allowsFunding
 )
 
 fun formatPriceChange(priceChangePercent: Double): String {

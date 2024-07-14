@@ -14,4 +14,5 @@ data class RoomCoinDetails(
 	val price: Double,
 	val priceChangePercent: Double,
 	val priceChangeColor: Long,
+	val allowsFunding: Boolean,
 )

@@ -34,7 +34,8 @@ class SaveCoinsDetailsUseCaseImplTest {
 				"https://static.bitfinex.com/images/icons/BTC.svg",
 				100.0,
 				10.0,
-				18374966855136706560UL
+				18374966855136706560UL,
+				true
 			),
 			CoinDetails(
 				"Ethereum",
@@ -42,7 +43,8 @@ class SaveCoinsDetailsUseCaseImplTest {
 				"https://static.bitfinex.com/images/icons/ETH.svg",
 				200.0,
 				-20.0,
-				18446462598732840960UL
+				18446462598732840960UL,
+				true
 			)
 		)
 	}

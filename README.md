@@ -1,3 +1,27 @@
+# SwissBorg challenge
+
+## Goal
+
+Create a crypto marketplace screen that displays a list of crypto trading pairs with USD.
+
+## Features
+
+- Price updates periodical (every 5 seconds).
+- Information on which coins allow yielding.
+- Coins icons.
+- Offline first, data is persisted.
+- Connectivity monitoring, only tries to fetch data when there's connectivity.
+
+## Arquitecture
+
+Clean Arquitecture with MVVM.
+
+## Notes
+
+Only tested in Android.
+
+## Kotlin Multiplatform
+
 This is a Kotlin Multiplatform project targeting Android, iOS.
 
 * `/composeApp` is for code that will be shared across your Compose Multiplatform applications.

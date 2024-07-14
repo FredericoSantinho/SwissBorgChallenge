@@ -1,27 +1,37 @@
 package neuro.swissborg.domain.usecase
 
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.zip
 import neuro.swissborg.domain.entity.CoinDetails
+import neuro.swissborg.domain.entity.Funding
 import neuro.swissborg.domain.entity.Symbol
 import neuro.swissborg.domain.entity.Ticker
+import neuro.swissborg.domain.repository.FundingRepository
 import neuro.swissborg.domain.repository.SymbolsRepository
 import neuro.swissborg.domain.repository.TickersRepository
 
 class GetCoinsDetailsUseCaseImpl(
 	private val tickersRepository: TickersRepository,
 	private val symbolsRepository: SymbolsRepository,
+	private val fundingRepository: FundingRepository,
 ) : GetCoinsDetailsUseCase {
 	override suspend fun execute(symbolPairs: List<String>): List<CoinDetails> {
-		return flow { emit(tickersRepository.getTickers(symbolPairs)) }.zip(flow {
-			emit(symbolsRepository.getSymbols())
-		}) { tickers, symbols ->
-			tickers.map { mapToCoinDetails(it, symbols) }
+		return combine(
+			flow { emit(tickersRepository.getTickers(symbolPairs)) },
+			flow {
+				emit(symbolsRepository.getSymbols())
+			},
+			flow { emit(fundingRepository.getFunding(symbolPairs.map { getSymbol(it) })) }) { tickers, symbols, funding ->
+			tickers.map { mapToCoinDetails(it, symbols, funding) }
 		}.first()
 	}
 
-	private fun mapToCoinDetails(ticker: Ticker, symbols: List<Symbol>): CoinDetails {
+	private fun mapToCoinDetails(
+		ticker: Ticker,
+		symbols: List<Symbol>,
+		funding: List<Funding>,
+	): CoinDetails {
 		val symbolPair = ticker.symbolPair
 		val symbol = getSymbol(symbolPair)
 
@@ -30,8 +40,17 @@ class GetCoinsDetailsUseCaseImpl(
 		val price = ticker.askPrice
 		val priceChangePercent = ticker.change * 100
 		val priceChangeColor = getPriceChangeColor(ticker.change)
+		val allowsFunding = funding.any { it.symbol == symbol }
 
-		return CoinDetails(name, symbol, iconUrl, price, priceChangePercent, priceChangeColor)
+		return CoinDetails(
+			name,
+			symbol,
+			iconUrl,
+			price,
+			priceChangePercent,
+			priceChangeColor,
+			allowsFunding
+		)
 	}
 
 	private fun getSymbol(symbolPair: String): String {

@@ -6,8 +6,10 @@ import dev.mokkery.mock
 import dev.mokkery.verifySuspend
 import kotlinx.coroutines.test.runTest
 import neuro.swissborg.domain.entity.CoinDetails
+import neuro.swissborg.domain.entity.Funding
 import neuro.swissborg.domain.entity.Symbol
 import neuro.swissborg.domain.entity.Ticker
+import neuro.swissborg.domain.repository.FundingRepository
 import neuro.swissborg.domain.repository.SymbolsRepository
 import neuro.swissborg.domain.repository.TickersRepository
 import kotlin.test.Test
@@ -22,8 +24,12 @@ class GetCoinsDetailsUseCaseImplTest {
 		val symbolsRepository = mock<SymbolsRepository> {
 			everySuspend { getSymbols() } returns buildSymbolsList()
 		}
+		val fundingRepository = mock<FundingRepository> {
+			everySuspend { getFunding(buildSymbolsList().map { it.symbol }) } returns buildFundingList()
+		}
 
-		val getCoinsDetailsUseCase = GetCoinsDetailsUseCaseImpl(tickersRepository, symbolsRepository)
+		val getCoinsDetailsUseCase =
+			GetCoinsDetailsUseCaseImpl(tickersRepository, symbolsRepository, fundingRepository)
 
 		val coinDetailsList = getCoinsDetailsUseCase.execute(buildSymbolPairsList())
 
@@ -35,7 +41,6 @@ class GetCoinsDetailsUseCaseImplTest {
 		assertEquals(expectedCoinDetailsList(), coinDetailsList)
 	}
 
-
 	private fun expectedCoinDetailsList(): List<CoinDetails> {
 		return listOf(
 			CoinDetails(
@@ -44,7 +49,8 @@ class GetCoinsDetailsUseCaseImplTest {
 				"https://static.bitfinex.com/images/icons/BTC.svg",
 				100.0,
 				10.0,
-				18378557361896816640UL
+				18378557361896816640UL,
+				true
 			),
 			CoinDetails(
 				"Ethereum",
@@ -52,9 +58,15 @@ class GetCoinsDetailsUseCaseImplTest {
 				"https://static.bitfinex.com/images/icons/ETH.svg",
 				200.0,
 				-20.0,
-				18446462598732840960UL
+				18446462598732840960UL,
+				false
 			)
 		)
+	}
+
+
+	private fun buildFundingList(): List<Funding> {
+		return listOf(Funding("BTC"))
 	}
 
 	private fun buildSymbolsList(): List<Symbol> {
