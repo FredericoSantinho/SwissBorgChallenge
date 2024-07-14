@@ -33,6 +33,10 @@ class MarketplaceViewModel(
 		startFetchingCoinsDetails()
 	}
 
+	fun onSearchTerm(searchTerm: String) {
+
+	}
+
 	private suspend fun foo(): Int {
 		delay(1)
 		return 1
