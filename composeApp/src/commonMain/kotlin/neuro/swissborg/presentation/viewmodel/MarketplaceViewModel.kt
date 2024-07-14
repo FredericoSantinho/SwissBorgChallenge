@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.tmapps.konnection.Konnection
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
@@ -28,6 +29,8 @@ class MarketplaceViewModel(
 	var state by mutableStateOf(MarketplaceState(isLoading = true))
 		private set
 
+	private val konnection = Konnection.instance
+
 	private val coinsDetailsModels = MutableStateFlow<List<CoinDetailsModel>>(emptyList())
 	private val searchTerm = MutableStateFlow("")
 
@@ -35,12 +38,30 @@ class MarketplaceViewModel(
 
 	init {
 		observeCoinsDetails()
-		startFetchingCoinsDetails()
 		setupStateUpdateWithSearchQuery()
+		observeConnectivityChanges()
 	}
 
 	fun onSearchTerm(searchTerm: String) {
 		this.searchTerm.value = searchTerm
+	}
+
+	fun consumeMessage() {
+		state = state.copy(message = null)
+	}
+
+	private fun observeConnectivityChanges() {
+		viewModelScope.launch(mainDispatcher) {
+			konnection.observeHasConnection()
+				.collect { hasConnection ->
+					if (hasConnection) {
+						startFetchingCoinsDetails()
+					} else {
+						stopFetchingCoinsDetails()
+						showMessage(Message.NoConnectivity)
+					}
+				}
+		}
 	}
 
 	private fun setupStateUpdateWithSearchQuery() {
@@ -57,8 +78,12 @@ class MarketplaceViewModel(
 	}
 
 	private fun startFetchingCoinsDetails() {
-		fetchCoinsDetailsJob.cancel()
+		stopFetchingCoinsDetails()
 		fetchCoinsDetailsJob = fetchPeriodicallyCoinsDetails()
+	}
+
+	private fun stopFetchingCoinsDetails() {
+		fetchCoinsDetailsJob.cancel()
 	}
 
 	private fun fetchPeriodicallyCoinsDetails() =
@@ -88,8 +113,13 @@ class MarketplaceViewModel(
 	}
 
 	private fun handleError(throwable: Throwable) {
-		// TODO: Implement
-		println(throwable.message)
+		throwable.message?.let {
+			showMessage(Message.Literal(it))
+		}
+	}
+
+	private fun showMessage(message: Message) {
+		state = state.copy(message = message)
 	}
 
 	private fun getSymbolPairsList(): List<String> {

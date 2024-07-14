@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
@@ -19,10 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import neuro.swissborg.presentation.mapper.toPresentation
 import neuro.swissborg.presentation.screens.common.LoadingComposable
 import neuro.swissborg.presentation.theme.SwissBorgChallengeTheme
+import neuro.swissborg.presentation.util.showSnackBar
 import neuro.swissborg.presentation.viewmodel.MarketplaceViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -41,7 +43,7 @@ fun MarketplaceScreen(viewModel: MarketplaceViewModel = koinViewModel()) {
 			snackbarHost = {
 				SnackbarHost(hostState = snackState, modifier = Modifier.navigationBarsPadding()) { data ->
 					Snackbar(
-						backgroundColor = Color.DarkGray,
+						backgroundColor = MaterialTheme.colors.onSurface,
 						snackbarData = data
 					)
 				}
@@ -74,5 +76,10 @@ fun MarketplaceScreen(viewModel: MarketplaceViewModel = koinViewModel()) {
 				}
 			}
 		}
+	}
+
+	state.message?.let {
+		showSnackBar(it.toPresentation(), snackScope, snackState)
+		viewModel.consumeMessage()
 	}
 }

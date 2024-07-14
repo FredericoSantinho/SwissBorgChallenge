@@ -4,5 +4,6 @@ import neuro.swissborg.presentation.model.CoinDetailsModel
 
 data class MarketplaceState(
 	val coinsDetailsModels: List<CoinDetailsModel> = emptyList(),
+	val message: Message? = null,
 	val isLoading: Boolean = false,
 )

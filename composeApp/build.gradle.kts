@@ -60,6 +60,7 @@ kotlin {
 			implementation(libs.ktor.client.content.negotiation)
 			implementation(libs.ktor.serialization.kotlinx.json)
 			implementation(libs.image.loader)
+			implementation(libs.konnection)
 
 			implementation(libs.room.runtime)
 			implementation(libs.sqlite.bundled)
