@@ -2,6 +2,8 @@ package neuro.swissborg.di
 
 import neuro.swissborg.domain.usecase.FetchCoinsDetailsUseCase
 import neuro.swissborg.domain.usecase.FetchCoinsDetailsUseCaseImpl
+import neuro.swissborg.domain.usecase.FetchPeriodicallyCoinsDetailsUseCase
+import neuro.swissborg.domain.usecase.FetchPeriodicallyCoinsDetailsUseCaseImpl
 import neuro.swissborg.domain.usecase.GetCoinsDetailsUseCase
 import neuro.swissborg.domain.usecase.GetCoinsDetailsUseCaseImpl
 import neuro.swissborg.domain.usecase.ObserveCoinDetailsUseCase
@@ -14,5 +16,6 @@ val useCaseModule = module {
 	factory<GetCoinsDetailsUseCase> { GetCoinsDetailsUseCaseImpl(get(), get()) }
 	factory<SaveCoinsDetailsUseCase> { SaveCoinsDetailsUseCaseImpl(get()) }
 	factory<FetchCoinsDetailsUseCase> { FetchCoinsDetailsUseCaseImpl(get(), get()) }
+	factory<FetchPeriodicallyCoinsDetailsUseCase> { FetchPeriodicallyCoinsDetailsUseCaseImpl(get()) }
 	factory<ObserveCoinDetailsUseCase> { ObserveCoinDetailsUseCaseImpl(get()) }
 }

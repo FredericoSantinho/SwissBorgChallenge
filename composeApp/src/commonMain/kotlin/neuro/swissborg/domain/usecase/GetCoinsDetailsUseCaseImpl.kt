@@ -1,5 +1,8 @@
 package neuro.swissborg.domain.usecase
 
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.zip
 import neuro.swissborg.domain.entity.CoinDetails
 import neuro.swissborg.domain.entity.Symbol
 import neuro.swissborg.domain.entity.Ticker
@@ -11,10 +14,11 @@ class GetCoinsDetailsUseCaseImpl(
 	private val symbolsRepository: SymbolsRepository,
 ) : GetCoinsDetailsUseCase {
 	override suspend fun execute(symbolPairs: List<String>): List<CoinDetails> {
-		val tickers = tickersRepository.getTickers(symbolPairs)
-		val symbols = symbolsRepository.getSymbols()
-
-		return tickers.map { mapToCoinDetails(it, symbols) }
+		return flow { emit(tickersRepository.getTickers(symbolPairs)) }.zip(flow {
+			emit(symbolsRepository.getSymbols())
+		}) { tickers, symbols ->
+			tickers.map { mapToCoinDetails(it, symbols) }
+		}.first()
 	}
 
 	private fun mapToCoinDetails(ticker: Ticker, symbols: List<Symbol>): CoinDetails {
@@ -31,7 +35,7 @@ class GetCoinsDetailsUseCaseImpl(
 	}
 
 	private fun getSymbol(symbolPair: String): String {
-		return symbolPair.replace("USD", "")
+		return symbolPair.replace(":USD", "").replace("USD", "")
 	}
 
 	private fun getPriceChangeColor(change: Double): ULong {
@@ -47,7 +51,7 @@ class GetCoinsDetailsUseCaseImpl(
 	}
 
 	companion object {
-		private const val GREEN = 18374966855136706560UL
+		private const val GREEN = 18378557361896816640UL
 		private const val RED = 18446462598732840960UL
 	}
 }

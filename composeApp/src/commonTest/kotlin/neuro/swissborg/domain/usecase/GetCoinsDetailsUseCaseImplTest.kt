@@ -44,7 +44,7 @@ class GetCoinsDetailsUseCaseImplTest {
 				"https://static.bitfinex.com/images/icons/BTC.svg",
 				100.0,
 				10.0,
-				18374966855136706560UL
+				18378557361896816640UL
 			),
 			CoinDetails(
 				"Ethereum",

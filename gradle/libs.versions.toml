@@ -20,11 +20,11 @@ turbine = "1.1.0"
 kotlin = "2.0.0"
 ktorClientCore = "3.0.0-wasm2"
 ktor = "3.0.0-wasm2"
-coil3 = "3.0.0-alpha08"
 ksp = "2.0.0-1.0.21"
 room = "2.7.0-alpha05"
 sqlite = "2.5.0-alpha05"
 mokkery = "2.1.1"
+imageLoader = "1.8.1"
 
 [libraries]
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinCompose" }
@@ -49,10 +49,7 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorClien
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientCore" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientCore" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientCore" }
-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
-coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
-coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil3" }
-coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "coil3" }
+image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "imageLoader" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }

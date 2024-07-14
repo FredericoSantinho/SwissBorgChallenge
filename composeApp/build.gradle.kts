@@ -59,10 +59,7 @@ kotlin {
 			implementation(libs.ktor.client.cio)
 			implementation(libs.ktor.client.content.negotiation)
 			implementation(libs.ktor.serialization.kotlinx.json)
-			implementation(libs.coil.compose.core)
-			implementation(libs.coil.mp)
-			implementation(libs.coil.network.ktor)
-			implementation(libs.coil.compose)
+			implementation(libs.image.loader)
 
 			implementation(libs.room.runtime)
 			implementation(libs.sqlite.bundled)

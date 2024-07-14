@@ -8,7 +8,6 @@ class FetchPeriodicallyCoinsDetailsUseCaseImpl(private val fetchCoinsDetailsUseC
 		while (true) {
 			fetchCoinsDetailsUseCase.execute(symbolPairs)
 			delay(periodSeconds * 1000L)
-			println("corri")
 		}
 	}
 }
