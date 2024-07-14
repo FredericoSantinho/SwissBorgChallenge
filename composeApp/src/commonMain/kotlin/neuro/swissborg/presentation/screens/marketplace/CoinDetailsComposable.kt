@@ -28,7 +28,7 @@ fun CoinDetailsComposable(coinDetailsModel: CoinDetailsModel, modifier: Modifier
 				painter = painter,
 				contentDescription = null,
 				modifier = Modifier
-					.size(64.dp)
+					.size(48.dp)
 			)
 			Spacer16()
 			Column {
