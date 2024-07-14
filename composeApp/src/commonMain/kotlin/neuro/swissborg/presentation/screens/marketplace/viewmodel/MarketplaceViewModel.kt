@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.tmapps.konnection.Konnection
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
@@ -13,25 +12,24 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import neuro.swissborg.domain.usecase.FetchPeriodicallyCoinsDetailsUseCase
 import neuro.swissborg.domain.usecase.GetSymbolPairsUseCase
 import neuro.swissborg.domain.usecase.ObserveCoinDetailsUseCase
 import neuro.swissborg.presentation.mapper.toPresentation
 import neuro.swissborg.presentation.model.CoinDetailsModel
+import neuro.swissborg.presentation.util.connection.ConnectionObserver
 
 class MarketplaceViewModel(
 	private val getSymbolPairsUseCase: GetSymbolPairsUseCase,
 	private val observeCoinDetailsUseCase: ObserveCoinDetailsUseCase,
 	private val fetchPeriodicallyCoinsDetailsUseCase: FetchPeriodicallyCoinsDetailsUseCase,
+	private val connectionObserver: ConnectionObserver,
 	private val mainDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
 	var state by mutableStateOf(MarketplaceState(isLoading = true))
 		private set
-
-	private val konnection = Konnection.instance
 
 	private val coinsDetailsModels = MutableStateFlow<List<CoinDetailsModel>>(emptyList())
 	private val searchTerm = MutableStateFlow("")
@@ -54,7 +52,7 @@ class MarketplaceViewModel(
 
 	private fun observeConnectivityChanges() {
 		viewModelScope.launch(mainDispatcher) {
-			konnection.observeHasConnection()
+			connectionObserver.observeHasConnection()
 				.collect { hasConnection ->
 					if (hasConnection) {
 						startFetchingCoinsDetails()
@@ -67,12 +65,14 @@ class MarketplaceViewModel(
 	}
 
 	private fun setupStateUpdateWithSearchQuery() {
-		coinsDetailsModels.combine(searchTerm) { coinModels, searchTerm ->
-			coinModels.let {
-				val filteredCoins = coinModels.filter { filterCoinsDetailsModels(it, searchTerm) }
-				setCoinsDetailsModelsState(filteredCoins)
-			}
-		}.launchIn(viewModelScope)
+		viewModelScope.launch(mainDispatcher) {
+			coinsDetailsModels.combine(searchTerm) { coinModels, searchTerm ->
+				coinModels.let {
+					val filteredCoins = coinModels.filter { filterCoinsDetailsModels(it, searchTerm) }
+					setCoinsDetailsModelsState(filteredCoins)
+				}
+			}.collectLatest { }
+		}
 	}
 
 	private fun filterCoinsDetailsModels(coinDetailsModel: CoinDetailsModel, query: String): Boolean {
@@ -115,6 +115,7 @@ class MarketplaceViewModel(
 	}
 
 	private fun handleError(throwable: Throwable) {
+		hideLoading()
 		throwable.message?.let {
 			showMessage(Message.Literal(it))
 		}
