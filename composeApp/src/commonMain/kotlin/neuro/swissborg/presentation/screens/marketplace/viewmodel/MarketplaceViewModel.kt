@@ -16,11 +16,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import neuro.swissborg.domain.usecase.FetchPeriodicallyCoinsDetailsUseCase
+import neuro.swissborg.domain.usecase.GetSymbolPairsUseCase
 import neuro.swissborg.domain.usecase.ObserveCoinDetailsUseCase
 import neuro.swissborg.presentation.mapper.toPresentation
 import neuro.swissborg.presentation.model.CoinDetailsModel
 
 class MarketplaceViewModel(
+	private val getSymbolPairsUseCase: GetSymbolPairsUseCase,
 	private val observeCoinDetailsUseCase: ObserveCoinDetailsUseCase,
 	private val fetchPeriodicallyCoinsDetailsUseCase: FetchPeriodicallyCoinsDetailsUseCase,
 	private val mainDispatcher: CoroutineDispatcher,
@@ -88,7 +90,7 @@ class MarketplaceViewModel(
 
 	private fun fetchPeriodicallyCoinsDetails() =
 		viewModelScope.launch(CoroutineExceptionHandler { _, throwable -> handleError(throwable) } + mainDispatcher) {
-			fetchPeriodicallyCoinsDetailsUseCase.execute(getSymbolPairsList())
+			fetchPeriodicallyCoinsDetailsUseCase.execute(getSymbolPairsUseCase.execute())
 		}
 
 	private fun observeCoinsDetails() {
@@ -120,14 +122,5 @@ class MarketplaceViewModel(
 
 	private fun showMessage(message: Message) {
 		state = state.copy(message = message)
-	}
-
-	private fun getSymbolPairsList(): List<String> {
-		val symbolsQuery =
-			"?symbols=tBTCUSD,tETHUSD,tCHSB:USD,tLTCUSD,tXRPUSD,tDSHUSD,tRRTUSD,tEOSUSD,tSANUSD,tDATUSD,tSNTUSD,tDOGE:USD,tLUNA:USD,tMATIC:USD,tNEXO:USD, tOCEAN:USD, tBEST:USD, tAAVE:USD, tPLUUSD, tFILUSD"
-				.replace("?symbols=", "")
-		val split = symbolsQuery.split(",").map { it.substring(1) }
-
-		return split
 	}
 }
