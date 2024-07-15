@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
@@ -89,13 +88,13 @@ class MarketplaceViewModel(
 	}
 
 	private fun fetchPeriodicallyCoinsDetails() =
-		viewModelScope.launch(CoroutineExceptionHandler { _, throwable -> handleError(throwable) } + mainDispatcher) {
+		viewModelScope.launch(mainDispatcher) {
 			fetchPeriodicallyCoinsDetailsUseCase.execute(getSymbolPairsUseCase.execute())
 		}
 
 	private fun observeCoinsDetails() {
 		viewModelScope.launch(mainDispatcher) {
-			observeCoinDetailsUseCase.execute().catch { handleError(it) }.collectLatest {
+			observeCoinDetailsUseCase.execute().catch { handleDatabaseError() }.collectLatest {
 				setCoinsDetailsModels(it.toPresentation())
 				hideLoading()
 			}
@@ -114,11 +113,9 @@ class MarketplaceViewModel(
 		state = state.copy(coinsDetailsModels = coinsDetailsModels)
 	}
 
-	private fun handleError(throwable: Throwable) {
+	private fun handleDatabaseError() {
 		hideLoading()
-		throwable.message?.let {
-			showMessage(Message.Literal(it))
-		}
+		showMessage(Message.DatabaseError)
 	}
 
 	private fun showMessage(message: Message) {

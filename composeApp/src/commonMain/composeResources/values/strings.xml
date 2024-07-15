@@ -1,6 +1,10 @@
 <resources>
   <string name="crypto_marketplace">Crypto Marketplace</string>
   <string name="search_for_a_coin">Search for a coin</string>
-  <string name="no_connectivity">No connectivity</string>
   <string name="earn_yield">EARN YIELD</string>
+
+  <!-- Messages -->
+  <string name="no_connectivity">No connectivity</string>
+  <string name="database_error">Critical database error</string>
+  <string name="fetch_error">Failed to refresh data</string>
 </resources>

@@ -2,7 +2,6 @@ package neuro.swissborg.presentation.screens.marketplace.viewmodel
 
 import androidx.compose.ui.graphics.Color
 import dev.mokkery.answering.returns
-import dev.mokkery.answering.throws
 import dev.mokkery.every
 import dev.mokkery.everySuspend
 import dev.mokkery.mock
@@ -189,46 +188,7 @@ class MarketplaceViewModelTest {
 
 	@OptIn(ExperimentalCoroutinesApi::class)
 	@Test
-	fun testFetchCoinsDetailsError() {
-		val getSymbolPairsUseCase = mock<GetSymbolPairsUseCase> {
-			every { execute() } returns buildSymbolPairsList()
-		}
-		val observeCoinDetailsUseCase = mock<ObserveCoinDetailsUseCase> {
-			every { execute() } returns flowOf(buildCoinDetailsList())
-		}
-		val fetchPeriodicallyCoinsDetailsUseCase = mock<FetchPeriodicallyCoinsDetailsUseCase> {
-			everySuspend { execute(buildSymbolPairsList()) } throws Throwable("FetchCoinsDetailsUseCase error")
-		}
-		val connectionObserver = mock<ConnectionObserver> {
-			every { observeHasConnection() } returns flowOf(true)
-		}
-		val mainDispatcher = UnconfinedTestDispatcher()
-
-		val marketplaceViewModel = MarketplaceViewModel(
-			getSymbolPairsUseCase,
-			observeCoinDetailsUseCase,
-			fetchPeriodicallyCoinsDetailsUseCase,
-			connectionObserver,
-			mainDispatcher
-		)
-
-		verify(VerifyMode.exactly(1)) {
-			observeCoinDetailsUseCase.execute()
-		}
-		verify(VerifyMode.exactly(1)) {
-			connectionObserver.observeHasConnection()
-		}
-		verifySuspend(VerifyMode.exactly(1)) {
-			fetchPeriodicallyCoinsDetailsUseCase.execute(buildSymbolPairsList())
-		}
-
-		val state = marketplaceViewModel.state
-		assertEquals(expectedFetchCoinsDetailsErrorState(), state)
-	}
-
-	@OptIn(ExperimentalCoroutinesApi::class)
-	@Test
-	fun testObserveCoinDetailsError() {
+	fun testDatabaseError() {
 		val getSymbolPairsUseCase = mock<GetSymbolPairsUseCase> {
 			every { execute() } returns buildSymbolPairsList()
 		}
@@ -271,13 +231,13 @@ class MarketplaceViewModelTest {
 	private fun expectedFetchCoinsDetailsErrorState(): MarketplaceState {
 		return MarketplaceState(
 			buildCoinDetailsModelList(),
-			Message.Literal("FetchCoinsDetailsUseCase error"),
+			Message.FetchError,
 			false
 		)
 	}
 
 	private fun expectedObserveCoinDetailsUseCaseErrorState(): MarketplaceState {
-		return MarketplaceState(emptyList(), Message.Literal("ObserveCoinDetailsUseCase error"), false)
+		return MarketplaceState(emptyList(), Message.DatabaseError, false)
 	}
 
 	private fun expectedNoConnectivityState(): MarketplaceState {
