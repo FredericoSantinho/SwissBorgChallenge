@@ -16,12 +16,12 @@ fun CoinDetails.toPresentation() = CoinDetailsModel(
 	allowsFunding
 )
 
-fun formatPriceChange(priceChangePercent: Double): String {
+fun List<CoinDetails>.toPresentation() = map { it.toPresentation() }
+
+private fun formatPriceChange(priceChangePercent: Double): String {
 	return if (priceChangePercent > 0) {
 		"+${priceChangePercent.format()}%"
 	} else {
 		"${priceChangePercent.format()}%"
 	}
 }
-
-fun List<CoinDetails>.toPresentation() = map { it.toPresentation() }
