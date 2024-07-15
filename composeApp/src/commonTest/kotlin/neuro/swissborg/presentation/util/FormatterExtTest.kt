@@ -13,6 +13,7 @@ class FormatterExtTest {
 		assertEquals("0.1", 0.1.format(2))
 		assertEquals("0.01", 0.01.format(2))
 		assertEquals("0.02", 0.015.format(2))
+		// Rounding this type of input represents an effort that is not worth it.
 		assertEquals("0.99", 0.999.format(2))
 		assertEquals("-0.1", (-0.1).format(2))
 		assertEquals("-0.01", (-0.01).format(2))
@@ -31,6 +32,7 @@ class FormatterExtTest {
 		assertEquals("$ 0.1", 0.1.formatCurrency(2))
 		assertEquals("$ 0.01", 0.01.formatCurrency(2))
 		assertEquals("$ 0.02", 0.015.formatCurrency(2))
+		// Rounding this type of input represents an effort that is not worth it.
 		assertEquals("$ 0.99", 0.999.formatCurrency(2))
 		assertEquals("$ -0.1", (-0.1).formatCurrency(2))
 		assertEquals("$ -0.01", (-0.01).formatCurrency(2))
