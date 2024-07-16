@@ -9,7 +9,7 @@ import org.koin.dsl.module
 
 val networkModule = module {
 	factory {
-		val client = HttpClient(CIO) {
+		HttpClient(CIO) {
 			defaultRequest {
 				url(BITFINEX_BASE_URL)
 			}
@@ -18,8 +18,6 @@ val networkModule = module {
 				json()
 			}
 		}
-
-		client
 	}
 }
 

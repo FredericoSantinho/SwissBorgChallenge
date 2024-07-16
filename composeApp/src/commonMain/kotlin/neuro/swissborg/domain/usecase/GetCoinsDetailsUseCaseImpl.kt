@@ -19,9 +19,7 @@ class GetCoinsDetailsUseCaseImpl(
 	override suspend fun execute(symbolPairs: List<String>): List<CoinDetails> {
 		return combine(
 			flow { emit(tickersRepository.getTickers(symbolPairs)) },
-			flow {
-				emit(symbolsRepository.getSymbols())
-			},
+			flow { emit(symbolsRepository.getSymbols()) },
 			flow { emit(fundingRepository.getFunding(symbolPairs.map { getSymbol(it) })) }) { tickers, symbols, funding ->
 			tickers.map { mapToCoinDetails(it, symbols, funding) }
 		}.first()

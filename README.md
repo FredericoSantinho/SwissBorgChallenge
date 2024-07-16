@@ -18,7 +18,10 @@ Clean Arquitecture with MVVM.
 
 ## Notes
 
-Only tested in Android.
+Only tested in Android.  
+No API request throttling. Although not complex to implement, it was considered outside the
+scope of
+this exercise, as per the requirements we are implicitly respecting API limits.
 
 ## Kotlin Multiplatform
 
