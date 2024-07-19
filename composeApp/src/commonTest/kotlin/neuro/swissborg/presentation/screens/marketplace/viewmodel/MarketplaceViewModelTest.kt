@@ -40,13 +40,15 @@ class MarketplaceViewModelTest {
 			every { observeHasConnection() } returns flowOf(true)
 		}
 		val mainDispatcher = UnconfinedTestDispatcher()
+		val ioDispatcher = UnconfinedTestDispatcher()
 
 		val marketplaceViewModel = MarketplaceViewModel(
 			getSymbolPairsUseCase,
 			observeCoinDetailsUseCase,
 			fetchPeriodicallyCoinsDetailsUseCase,
 			connectionObserver,
-			mainDispatcher
+			mainDispatcher,
+			ioDispatcher
 		)
 
 		verify(VerifyMode.exactly(1)) {
@@ -79,14 +81,19 @@ class MarketplaceViewModelTest {
 			every { observeHasConnection() } returns flowOf(true)
 		}
 		val mainDispatcher = UnconfinedTestDispatcher()
+		val ioDispatcher = UnconfinedTestDispatcher()
 
 		val marketplaceViewModel = MarketplaceViewModel(
 			getSymbolPairsUseCase,
 			observeCoinDetailsUseCase,
 			fetchPeriodicallyCoinsDetailsUseCase,
 			connectionObserver,
-			mainDispatcher
+			mainDispatcher,
+			ioDispatcher
 		)
+
+		ioDispatcher.scheduler.advanceTimeBy(150)
+		ioDispatcher.scheduler.runCurrent()
 
 		verify(VerifyMode.exactly(1)) {
 			observeCoinDetailsUseCase.execute()
@@ -118,18 +125,26 @@ class MarketplaceViewModelTest {
 			every { observeHasConnection() } returns flowOf(true)
 		}
 		val mainDispatcher = UnconfinedTestDispatcher()
+		val ioDispatcher = UnconfinedTestDispatcher()
 
 		val marketplaceViewModel = MarketplaceViewModel(
 			getSymbolPairsUseCase,
 			observeCoinDetailsUseCase,
 			fetchPeriodicallyCoinsDetailsUseCase,
 			connectionObserver,
-			mainDispatcher
+			mainDispatcher,
+			ioDispatcher
 		)
+
+		ioDispatcher.scheduler.advanceTimeBy(150)
+		ioDispatcher.scheduler.runCurrent()
 
 		assertEquals(expectedState(), marketplaceViewModel.state)
 
 		marketplaceViewModel.onSearchTerm("Eth")
+
+		ioDispatcher.scheduler.advanceTimeBy(150)
+		ioDispatcher.scheduler.runCurrent()
 
 		assertEquals(expectedFilteredState(), marketplaceViewModel.state)
 	}
@@ -151,13 +166,15 @@ class MarketplaceViewModelTest {
 			every { observeHasConnection() } returns connectivityFlow
 		}
 		val mainDispatcher = UnconfinedTestDispatcher()
+		val ioDispatcher = UnconfinedTestDispatcher()
 
 		val marketplaceViewModel = MarketplaceViewModel(
 			getSymbolPairsUseCase,
 			observeCoinDetailsUseCase,
 			fetchPeriodicallyCoinsDetailsUseCase,
 			connectionObserver,
-			mainDispatcher
+			mainDispatcher,
+			ioDispatcher
 		)
 
 		verify(VerifyMode.exactly(1)) {
@@ -169,6 +186,9 @@ class MarketplaceViewModelTest {
 		verifySuspend(VerifyMode.exactly(0)) {
 			fetchPeriodicallyCoinsDetailsUseCase.execute(buildSymbolPairsList())
 		}
+
+		ioDispatcher.scheduler.advanceTimeBy(150)
+		ioDispatcher.scheduler.runCurrent()
 
 		val state = marketplaceViewModel.state
 		assertEquals(expectedNoConnectivityState(), state)
@@ -202,13 +222,15 @@ class MarketplaceViewModelTest {
 			every { observeHasConnection() } returns flowOf(true)
 		}
 		val mainDispatcher = UnconfinedTestDispatcher()
+		val ioDispatcher = UnconfinedTestDispatcher()
 
 		val marketplaceViewModel = MarketplaceViewModel(
 			getSymbolPairsUseCase,
 			observeCoinDetailsUseCase,
 			fetchPeriodicallyCoinsDetailsUseCase,
 			connectionObserver,
-			mainDispatcher
+			mainDispatcher,
+			ioDispatcher
 		)
 
 		verify(VerifyMode.exactly(1)) {
