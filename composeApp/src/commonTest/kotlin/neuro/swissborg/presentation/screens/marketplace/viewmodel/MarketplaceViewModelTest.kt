@@ -47,8 +47,7 @@ class MarketplaceViewModelTest {
 			observeCoinDetailsUseCase,
 			fetchPeriodicallyCoinsDetailsUseCase,
 			connectionObserver,
-			mainDispatcher,
-			ioDispatcher
+			mainDispatcher
 		)
 
 		verify(VerifyMode.exactly(1)) {
@@ -88,12 +87,11 @@ class MarketplaceViewModelTest {
 			observeCoinDetailsUseCase,
 			fetchPeriodicallyCoinsDetailsUseCase,
 			connectionObserver,
-			mainDispatcher,
-			ioDispatcher
+			mainDispatcher
 		)
 
-		ioDispatcher.scheduler.advanceTimeBy(150)
-		ioDispatcher.scheduler.runCurrent()
+		mainDispatcher.scheduler.advanceTimeBy(150)
+		mainDispatcher.scheduler.runCurrent()
 
 		verify(VerifyMode.exactly(1)) {
 			observeCoinDetailsUseCase.execute()
@@ -132,19 +130,18 @@ class MarketplaceViewModelTest {
 			observeCoinDetailsUseCase,
 			fetchPeriodicallyCoinsDetailsUseCase,
 			connectionObserver,
-			mainDispatcher,
-			ioDispatcher
+			mainDispatcher
 		)
 
-		ioDispatcher.scheduler.advanceTimeBy(150)
-		ioDispatcher.scheduler.runCurrent()
+		mainDispatcher.scheduler.advanceTimeBy(150)
+		mainDispatcher.scheduler.runCurrent()
 
 		assertEquals(expectedState(), marketplaceViewModel.state)
 
 		marketplaceViewModel.onSearchTerm("Eth")
 
-		ioDispatcher.scheduler.advanceTimeBy(150)
-		ioDispatcher.scheduler.runCurrent()
+		mainDispatcher.scheduler.advanceTimeBy(150)
+		mainDispatcher.scheduler.runCurrent()
 
 		assertEquals(expectedFilteredState(), marketplaceViewModel.state)
 	}
@@ -173,8 +170,7 @@ class MarketplaceViewModelTest {
 			observeCoinDetailsUseCase,
 			fetchPeriodicallyCoinsDetailsUseCase,
 			connectionObserver,
-			mainDispatcher,
-			ioDispatcher
+			mainDispatcher
 		)
 
 		verify(VerifyMode.exactly(1)) {
@@ -187,8 +183,8 @@ class MarketplaceViewModelTest {
 			fetchPeriodicallyCoinsDetailsUseCase.execute(buildSymbolPairsList())
 		}
 
-		ioDispatcher.scheduler.advanceTimeBy(150)
-		ioDispatcher.scheduler.runCurrent()
+		mainDispatcher.scheduler.advanceTimeBy(150)
+		mainDispatcher.scheduler.runCurrent()
 
 		val state = marketplaceViewModel.state
 		assertEquals(expectedNoConnectivityState(), state)
@@ -229,8 +225,7 @@ class MarketplaceViewModelTest {
 			observeCoinDetailsUseCase,
 			fetchPeriodicallyCoinsDetailsUseCase,
 			connectionObserver,
-			mainDispatcher,
-			ioDispatcher
+			mainDispatcher
 		)
 
 		verify(VerifyMode.exactly(1)) {

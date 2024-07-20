@@ -8,14 +8,12 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import neuro.swissborg.domain.usecase.FetchPeriodicallyCoinsDetailsUseCase
 import neuro.swissborg.domain.usecase.GetSymbolPairsUseCase
@@ -30,7 +28,6 @@ class MarketplaceViewModel(
 	private val fetchPeriodicallyCoinsDetailsUseCase: FetchPeriodicallyCoinsDetailsUseCase,
 	private val connectionObserver: ConnectionObserver,
 	private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-	private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
 
 	var state by mutableStateOf(MarketplaceState(isLoading = true))
@@ -72,9 +69,7 @@ class MarketplaceViewModel(
 	@OptIn(FlowPreview::class)
 	private fun setupStateUpdateWithSearchQuery() {
 		viewModelScope.launch(mainDispatcher) {
-			coinsDetailsModels.combine(
-				searchTerm.debounce(150).flowOn(ioDispatcher)
-			) { coinModels, searchTerm ->
+			coinsDetailsModels.combine(searchTerm.debounce(150)) { coinModels, searchTerm ->
 				coinModels.let {
 					val filteredCoins = coinModels.filter { filterCoinsDetailsModels(it, searchTerm) }
 					setCoinsDetailsModelsState(filteredCoins)
